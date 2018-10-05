@@ -1,4 +1,4 @@
-package io.cmichel.boilerplate;
+package io.davide.nfcwriteprotected;
 
 import android.widget.Toast;
 
@@ -20,7 +20,7 @@ public class Module extends ReactContextBaseJavaModule {
 
   @Override
   public String getName() {
-    return "Boilerplate";
+    return "NfcProtectedWrite";
   }
 
   @Override
