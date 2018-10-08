@@ -1,5 +1,6 @@
 package io.davide.nfcwriteprotected;
 
+import android.app.Activity;
 import android.widget.Toast;
 
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -23,8 +24,8 @@ public class Module extends ReactContextBaseJavaModule {
   private static final String DURATION_SHORT_KEY = "SHORT";
   private static final String DURATION_LONG_KEY = "LONG";
 
-  private NxpNfcLib nxpLib = RNProtectedWritePackage.getLibInstance();
-
+  private NxpNfcLib nxpLib = null;
+  private String nxpLibKey = "ca5b8b55afc1d1267faf36fc14bc9ac3";
 
   public Module(ReactApplicationContext reactContext) {
     super(reactContext);
@@ -49,12 +50,21 @@ public class Module extends ReactContextBaseJavaModule {
     Toast.makeText(getReactApplicationContext(), message, Toast.LENGTH_SHORT).show();
   }
 
+  private void initializeLibrary()
+  {
+    // Initialize the TapLinx library
+    nxpLib = NxpNfcLib.getInstance();
+    nxpLib.registerActivity(getCurrentActivity(), nxpLibKey);
+  }
 
   @ReactMethod
   public void connect() {
 
     try{
-      INTag213215216 objNtag = NTagFactory.getInstance().getNTAG213(RNProtectedWritePackage.getLibInstance().getCustomModules());
+
+      initializeLibrary();
+
+      INTag213215216 objNtag = NTagFactory.getInstance().getNTAG213(nxpLib.getCustomModules());
       objNtag.getReader().connect();
 
     } catch (Exception e) {
