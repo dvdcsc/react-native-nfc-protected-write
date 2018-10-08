@@ -17,7 +17,7 @@ import com.nxp.nfclib.ntag.NTagFactory;
 import com.nxp.nfclib.utils.Utilities;
 import com.nxp.nfclib.CardType;
 import com.nxp.nfclib.NxpNfcLib;
-
+import com.nxp.nfclib.interfaces.IReader;
 
 public class Module extends ReactContextBaseJavaModule {
 
@@ -65,8 +65,9 @@ public class Module extends ReactContextBaseJavaModule {
       initializeLibrary();
 
       INTag213215216 objNtag = NTagFactory.getInstance().getNTAG213(nxpLib.getCustomModules());
-      //objNtag.getReader().connect();
-      Toast.makeText(getReactApplicationContext(), "NFC connected "+objNtag, Toast.LENGTH_LONG).show();
+      IReader reader = objNtag.getReader();
+      Toast.makeText(getReactApplicationContext(), "NFC connected "+reader, Toast.LENGTH_LONG).show();
+      reader.connect();
 
 
     } catch (Exception e) {
