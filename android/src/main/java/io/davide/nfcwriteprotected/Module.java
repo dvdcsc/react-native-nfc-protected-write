@@ -67,7 +67,7 @@ public class Module extends ReactContextBaseJavaModule {
 
       initializeLibrary();
 
-      INTag213215216 objNtag = NTagFactory.getInstance().getNTAG213(nxpLib.getCustomModules());
+      INTag213215216 objNtag = NTagFactory.getInstance().getNTAG216(nxpLib.getCustomModules());
       Toast.makeText(getReactApplicationContext(), "objNtag: "+objNtag, Toast.LENGTH_LONG).show();
 
       objNtag.getReader().connect();
