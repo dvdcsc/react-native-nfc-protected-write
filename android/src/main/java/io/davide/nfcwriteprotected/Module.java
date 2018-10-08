@@ -53,9 +53,17 @@ public class Module extends ReactContextBaseJavaModule {
   private void initializeLibrary()
   {
     // Initialize the TapLinx library
+    Toast.makeText(getReactApplicationContext(), "___0___", Toast.LENGTH_SHORT).show();
+
     nxpLib.startForeGroundDispatch();
+    Toast.makeText(getReactApplicationContext(), "___1___", Toast.LENGTH_SHORT).show();
+
     nxpLib = NxpNfcLib.getInstance();
+    Toast.makeText(getReactApplicationContext(), "___2___", Toast.LENGTH_SHORT).show();
+
     nxpLib.registerActivity(getCurrentActivity(), nxpLibKey);
+    Toast.makeText(getReactApplicationContext(), "___3___", Toast.LENGTH_SHORT).show();
+
   }
 
   @ReactMethod
