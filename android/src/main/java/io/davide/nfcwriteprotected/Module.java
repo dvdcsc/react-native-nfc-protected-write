@@ -25,7 +25,7 @@ public class Module extends ReactContextBaseJavaModule {
   private static final String DURATION_LONG_KEY = "LONG";
 
   private NxpNfcLib nxpLib = null;
-  private String nxpLibKey = "ca5b8b55afc1d1267faf36fc14bc9ac3";
+  private String nxpLibKey = "283291b7045c2bfa1afc97c03d209a56";
 
   public Module(ReactApplicationContext reactContext) {
     super(reactContext);
