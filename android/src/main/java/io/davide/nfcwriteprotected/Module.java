@@ -67,11 +67,10 @@ public class Module extends ReactContextBaseJavaModule {
 
       initializeLibrary();
 
-      INTag213215216 objNtag = NTagFactory.getInstance().getNTAG216(nxpLib.getCustomModules());
-      Toast.makeText(getReactApplicationContext(), "objNtag: "+objNtag, Toast.LENGTH_LONG).show();
 
-      objNtag.getReader().connect();
-      Toast.makeText(getReactApplicationContext(), "NFC connected", Toast.LENGTH_LONG).show();
+      CardType type = nxpLib.getCardType(getCurrentActivity().getIntent());
+
+      Toast.makeText(getReactApplicationContext(), "type: "+type, Toast.LENGTH_LONG).show();
 
 
     } catch (Exception e) {
