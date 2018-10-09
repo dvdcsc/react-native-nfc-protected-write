@@ -66,11 +66,9 @@ public class Module extends ReactContextBaseJavaModule {
     try{
 
       initializeLibrary();
-
-
-      CardType type = nxpLib.getCardType(getCurrentActivity().getIntent());
-
-      Toast.makeText(getReactApplicationContext(), "type: "+type, Toast.LENGTH_LONG).show();
+      INTag213215216 objNtag = NTagFactory.getInstance().getNTAG213(nxpLib.getCustomModules());
+      objNtag.getReader().connect();
+      Toast.makeText(getReactApplicationContext(), "objNtag: "+objNtag, Toast.LENGTH_LONG).show();
 
 
     } catch (Exception e) {
