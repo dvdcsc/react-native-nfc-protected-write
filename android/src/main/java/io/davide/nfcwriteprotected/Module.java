@@ -91,6 +91,8 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
   @Override
   public void onNewIntent(Intent intent) {
     Log.d(LOG_TAG, "onNewIntent " + intent);
+    Toast.makeText(getReactApplicationContext(), "onNewIntent: "+intent, Toast.LENGTH_LONG).show();
+
     connect();
   }
   @Override
@@ -114,7 +116,8 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
   @Override
   public void onHostResume() {
     Log.d(LOG_TAG, "onResume");
-    initializeLibrary();                  // Initialize library
+    Toast.makeText(getReactApplicationContext(), "startForeGroundDispatch: ", Toast.LENGTH_LONG).show();
+
     nxpLib.startForeGroundDispatch();
   }
 
@@ -145,6 +148,8 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
     nxpLib = NxpNfcLib.getInstance();
     nxpLib.registerActivity(getCurrentActivity(), nxpLibKey);
     nxpLib.startForeGroundDispatch();
+    Toast.makeText(getReactApplicationContext(), "initializeLibrary", Toast.LENGTH_LONG).show();
+
 
   }
 
