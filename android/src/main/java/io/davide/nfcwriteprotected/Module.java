@@ -94,10 +94,16 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
 
   @Override
   public void onNewIntent(Intent intent) {
-    //Log.d(LOG_TAG, "onNewIntent " + intent);
-    Toast.makeText(getReactApplicationContext(), "onNewIntent: ", Toast.LENGTH_LONG).show();
+    try {
+      //Log.d(LOG_TAG, "onNewIntent " + intent);
+      Toast.makeText(getReactApplicationContext(), "onNewIntent: ", Toast.LENGTH_LONG).show();
 
-    //connect();
+      connect(intent);
+    } catch (Exception e) {
+
+        Toast.makeText(getReactApplicationContext(), "NFC connect error: "+e.getMessage(), Toast.LENGTH_LONG).show();
+
+      }
   }
   @Override
   public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
@@ -163,11 +169,11 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
   }
 
   @ReactMethod
-  public void connect() {
+  public void connect(Intent intent) {
 
     try{
 
-      CardType m_cardType = nxpLib.getCardType( getCurrentActivity().getIntent() );
+      CardType m_cardType = nxpLib.getCardType( intent );
       Toast.makeText(getReactApplicationContext(), "m_cardType: "+m_cardType.getTagName(), Toast.LENGTH_LONG).show();
 
       Tag tag =  getCurrentActivity().getIntent().getParcelableExtra( NfcAdapter.EXTRA_TAG );
