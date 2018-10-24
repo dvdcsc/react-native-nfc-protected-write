@@ -28,8 +28,6 @@ import com.facebook.react.bridge.*;
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
 
 import android.app.PendingIntent;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.IntentFilter.MalformedMimeTypeException;
 import android.net.Uri;
 import android.nfc.FormatException;
@@ -119,6 +117,13 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
       }
     }
   };
+
+
+  @Override
+  public void onNewIntent(Intent intent) {
+    Log.d(LOG_TAG, "onNewIntent " + intent);
+    connect();
+  }
 
   private void sendEvent(String eventName,
                          @Nullable WritableMap params) {
@@ -234,7 +239,7 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
     if (isResumed) {
       nxpLib.startForeGroundDispatch();
     }
-    
+
     CardType m_cardType = nxpLib.getCardType( getCurrentActivity().getIntent() );
     Toast.makeText(getReactApplicationContext(), "m_cardType: "+m_cardType.getTagName(), Toast.LENGTH_LONG).show();
 
@@ -255,10 +260,6 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
   public void connect() {
 
     try{
-
-      initializeLibrary();
-      Toast.makeText(getReactApplicationContext(), "Intent: "+getCurrentActivity().getIntent(), Toast.LENGTH_LONG).show();
-
 
       CardType m_cardType = nxpLib.getCardType( getCurrentActivity().getIntent() );
       Toast.makeText(getReactApplicationContext(), "m_cardType: "+m_cardType.getTagName(), Toast.LENGTH_LONG).show();
