@@ -70,6 +70,8 @@ public class Module extends ReactContextBaseJavaModule {
     try{
 
       initializeLibrary();
+      Toast.makeText(getReactApplicationContext(), "Intent: "+getCurrentActivity().getIntent(), Toast.LENGTH_LONG).show();
+
 
       CardType m_cardType = nxpLib.getCardType( getCurrentActivity().getIntent() );
       Toast.makeText(getReactApplicationContext(), "m_cardType: "+m_cardType.getTagName(), Toast.LENGTH_LONG).show();
