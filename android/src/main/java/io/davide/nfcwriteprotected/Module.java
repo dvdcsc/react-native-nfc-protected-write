@@ -3,87 +3,40 @@ package io.davide.nfcwriteprotected;
 import android.app.Activity;
 import android.nfc.NfcAdapter;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.facebook.react.ReactActivity;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import java.util.HashMap;
-import java.util.Map;
-
-
-import android.app.Activity;
-import android.content.BroadcastReceiver;
+import java.util.Map;;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.util.Base64;
-import android.util.Log;
-import android.provider.Settings;
 import com.facebook.react.bridge.*;
-import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
-
-import android.app.PendingIntent;
-import android.app.Application;
-import android.content.IntentFilter.MalformedMimeTypeException;
-import android.net.Uri;
-import android.nfc.FormatException;
-import android.nfc.NdefMessage;
-import android.nfc.NdefRecord;
-import android.nfc.NfcAdapter;
-import android.nfc.NfcEvent;
 import android.nfc.Tag;
-import android.nfc.TagLostException;
-import android.nfc.tech.TagTechnology;
-import android.nfc.tech.Ndef;
-import android.nfc.tech.NfcA;
-import android.nfc.tech.NdefFormatable;
-import android.os.Parcelable;
-
-import org.json.JSONObject;
-import org.json.JSONException;
-
 import java.util.*;
-
-import static android.app.Activity.RESULT_OK;
-import static android.os.Build.VERSION_CODES.LOLLIPOP;
-import static com.facebook.react.bridge.UiThreadUtil.runOnUiThread;
-
-import com.nxp.nfclib.desfire.IDESFireEV1;
-import com.nxp.nfclib.icode.ICodeFactory;
-import com.nxp.nfclib.icode.IICodeSLIXS;
 import com.nxp.nfclib.ntag.INTag213215216;
 import com.nxp.nfclib.ntag.NTagFactory;
-import com.nxp.nfclib.utils.Utilities;
 import com.nxp.nfclib.CardType;
 import com.nxp.nfclib.NxpNfcLib;
-import com.nxp.nfclib.interfaces.IReader;
-import android.nfc.Tag;
-import com.nxp.nfclib.CardType;
-
-import android.app.Activity;
-import android.content.Intent;
+import com.nxp.nfclib.utils.Utilities;
 
 public class Module extends ReactContextBaseJavaModule  implements ActivityEventListener, LifecycleEventListener {
 
-  private static final String LOG_TAG = "NfcProtectedWrite";
-  private final List<IntentFilter> intentFilters = new ArrayList<IntentFilter>();
+  /*private final List<IntentFilter> intentFilters = new ArrayList<IntentFilter>();
   private final ArrayList<String[]> techLists = new ArrayList<String[]>();
   private Context context;
   private ReactApplicationContext reactContext;
   private Boolean isForegroundEnabled = false;
-  private Boolean isResumed = false;
+  private Boolean isResumed = false;*/
 
   private static final String DURATION_SHORT_KEY = "SHORT";
   private static final String DURATION_LONG_KEY = "LONG";
   private NxpNfcLib nxpLib = null;
   private String nxpLibKey = "0235a960fcb9a265be2ffe54da8288bd";
-
+  final byte[] byPassword = new byte[] {(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff};
+  final byte[] byAcknowg = new byte[] {0x00,0x00};
+  final byte[] byToWrite = new byte[] {0x00,0x00,0x00,0x00};
 
   public Module(ReactApplicationContext reactContext) {
 
@@ -95,7 +48,7 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
   @Override
   public void onNewIntent(Intent intent) {
     try {
-      //Log.d(LOG_TAG, "onNewIntent " + intent);
+
       Toast.makeText(getReactApplicationContext(), "onNewIntent: ", Toast.LENGTH_LONG).show();
 
       connect(intent);
@@ -107,7 +60,7 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
   }
   @Override
   public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
-    Log.d(LOG_TAG, "onActivityResult");
+
   }
 
   @Override
@@ -125,7 +78,6 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
 
   @Override
   public void onHostResume() {
-    Log.d(LOG_TAG, "onResume");
     Toast.makeText(getReactApplicationContext(), "startForeGroundDispatch: ", Toast.LENGTH_LONG).show();
 
     nxpLib.startForeGroundDispatch();
@@ -133,14 +85,11 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
 
   @Override
   public void onHostPause() {
-    Log.d(LOG_TAG, "onPause");
-    isResumed = false;
     nxpLib.stopForeGroundDispatch();
   }
 
   @Override
   public void onHostDestroy() {
-    Log.d(LOG_TAG, "onDestroy");
     nxpLib.stopForeGroundDispatch();
   }
 
@@ -180,19 +129,29 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
       Toast.makeText(getReactApplicationContext(), "tag: "+tag, Toast.LENGTH_LONG).show();
 
 
-      INTag213215216 objNtag = NTagFactory.getInstance().getNTAG213(nxpLib.getCustomModules());
+      INTag213215216 objNtag = NTagFactory.getInstance().getNTAG216(nxpLib.getCustomModules());
       Toast.makeText(getReactApplicationContext(), "objNtag: "+objNtag, Toast.LENGTH_LONG).show();
 
       objNtag.getReader().connect();
       Toast.makeText(getReactApplicationContext(), "__CONNECTED__", Toast.LENGTH_LONG).show();
 
+      objNtag.enablePasswordProtection(true,0x10);
+      objNtag.authenticatePwd(byPassword,byAcknowg);
+      Toast.makeText(getReactApplicationContext(), "AUTHENTICATE", Toast.LENGTH_LONG).show();
+
+
+      byte[] data = objNtag.read(0x0f);
+      Toast.makeText(getReactApplicationContext(), "read page 0x0f: " + Utilities.byteToHexString(data) , Toast.LENGTH_LONG).show();
+      objNtag.write(0x0f, byToWrite);
+      data = objNtag.read(0x10);
+      Toast.makeText(getReactApplicationContext(), "read page 0x10: " + Utilities.byteToHexString(data) , Toast.LENGTH_LONG).show();
+      objNtag.write(0x10, byToWrite);
+
+
 
     } catch (Exception e) {
 
       Toast.makeText(getReactApplicationContext(), "NFC connect error: "+e.getMessage(), Toast.LENGTH_LONG).show();
-
-    } finally {
-      nxpLib.stopForeGroundDispatch();
 
     }
 
