@@ -134,18 +134,15 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
       objNtag.getReader().connect();
       Toast.makeText(getReactApplicationContext(), "__CONNECTED__", Toast.LENGTH_LONG).show();
 
-      /*objNtag.enablePasswordProtection(true,0x10);
+      objNtag.enablePasswordProtection(false,0x10);
       Toast.makeText(getReactApplicationContext(), "AUTHENTICATE_1", Toast.LENGTH_LONG).show();*/
 
       objNtag.authenticatePwd(byPassword,byAcknowg);
-      Toast.makeText(getReactApplicationContext(), "AUTHENTICATE_2", Toast.LENGTH_LONG).show();
 
 
       byte[] data = objNtag.read(0x0f);
-      Toast.makeText(getReactApplicationContext(), "read page 0x0f: " + Utilities.byteToHexString(data) , Toast.LENGTH_LONG).show();
       objNtag.write(0x0f, byToWrite);
       data = objNtag.read(0x10);
-      Toast.makeText(getReactApplicationContext(), "read page 0x10: " + Utilities.byteToHexString(data) , Toast.LENGTH_LONG).show();
       objNtag.write(0x10, byToWrite);
 
 
