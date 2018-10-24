@@ -94,10 +94,10 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
 
   @Override
   public void onNewIntent(Intent intent) {
-    Log.d(LOG_TAG, "onNewIntent " + intent);
-    Toast.makeText(getReactApplicationContext(), "onNewIntent: "+intent, Toast.LENGTH_LONG).show();
+    //Log.d(LOG_TAG, "onNewIntent " + intent);
+    Toast.makeText(getReactApplicationContext(), "onNewIntent: ", Toast.LENGTH_LONG).show();
 
-    connect();
+    //connect();
   }
   @Override
   public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
