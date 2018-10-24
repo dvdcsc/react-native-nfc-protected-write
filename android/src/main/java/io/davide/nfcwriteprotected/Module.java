@@ -176,24 +176,13 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
   }
 
   @ReactMethod
-  public void start(Callback callback) {
+  public void start() {
 
     initializeLibrary();
     NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
-    if (nfcAdapter != null) {
-
-      IntentFilter filter = new IntentFilter(NfcAdapter.ACTION_ADAPTER_STATE_CHANGED);
-      Activity currentActivity = getCurrentActivity();
-      if (currentActivity == null) {
-        callback.invoke("fail to get current activity");
-        return;
-      }
-
-      currentActivity.registerReceiver(mReceiver, filter);
-      callback.invoke();
-    } else {
-      callback.invoke("no nfc support");
-    }
+    IntentFilter filter = new IntentFilter(NfcAdapter.ACTION_ADAPTER_STATE_CHANGED);
+    Activity currentActivity = getCurrentActivity();
+    currentActivity.registerReceiver(mReceiver, filter);
   }
 
   @ReactMethod
@@ -237,7 +226,7 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
       nxpLib.startForeGroundDispatch();
     }
 
-   
+
 
     callback.invoke();
   }
