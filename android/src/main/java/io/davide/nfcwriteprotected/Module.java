@@ -1,6 +1,8 @@
 package io.davide.nfcwriteprotected;
 
 import android.app.Activity;
+import android.nfc.NfcAdapter;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -18,6 +20,8 @@ import com.nxp.nfclib.utils.Utilities;
 import com.nxp.nfclib.CardType;
 import com.nxp.nfclib.NxpNfcLib;
 import com.nxp.nfclib.interfaces.IReader;
+import android.nfc.Tag;
+import com.nxp.nfclib.CardType;
 
 public class Module extends ReactContextBaseJavaModule {
 
@@ -55,8 +59,8 @@ public class Module extends ReactContextBaseJavaModule {
     // Initialize the TapLinx library
 
     nxpLib = NxpNfcLib.getInstance();
-    nxpLib.startForeGroundDispatch();
     nxpLib.registerActivity(getCurrentActivity(), nxpLibKey);
+    nxpLib.startForeGroundDispatch();
 
   }
 
@@ -66,9 +70,19 @@ public class Module extends ReactContextBaseJavaModule {
     try{
 
       initializeLibrary();
+
+      CardType m_cardType = nxpLib.getCardType( getCurrentActivity().getIntent() );
+      Toast.makeText(getReactApplicationContext(), "m_cardType: "+m_cardType.getTagName(), Toast.LENGTH_LONG).show();
+
+      Tag tag =  getCurrentActivity().getIntent().getParcelableExtra( NfcAdapter.EXTRA_TAG );
+      Toast.makeText(getReactApplicationContext(), "tag: "+tag, Toast.LENGTH_LONG).show();
+
+
       INTag213215216 objNtag = NTagFactory.getInstance().getNTAG213(nxpLib.getCustomModules());
-      objNtag.getReader().connect();
       Toast.makeText(getReactApplicationContext(), "objNtag: "+objNtag, Toast.LENGTH_LONG).show();
+
+      objNtag.getReader().connect();
+      Toast.makeText(getReactApplicationContext(), "__CONNECTED__", Toast.LENGTH_LONG).show();
 
 
     } catch (Exception e) {
