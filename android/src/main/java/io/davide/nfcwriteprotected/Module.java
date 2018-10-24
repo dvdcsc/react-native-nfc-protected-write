@@ -146,7 +146,6 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
 
       data = objNtag.read(0x10);
       Toast.makeText(getReactApplicationContext(), "read page 0x10: " + Utilities.byteToHexString(data) , Toast.LENGTH_LONG).show();
-      Toast.makeText(getReactApplicationContext(), "isPageLocked: " + objNtag.isPageLocked(0x10) , Toast.LENGTH_LONG).show();
       objNtag.enablePasswordProtection(false,0x10);
       Toast.makeText(getReactApplicationContext(), "disablePasswordProtection: " , Toast.LENGTH_LONG).show();
 
