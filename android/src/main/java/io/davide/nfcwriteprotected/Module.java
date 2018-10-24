@@ -29,6 +29,7 @@ import com.facebook.react.bridge.*;
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
 
 import android.app.PendingIntent;
+import android.app.Application;
 import android.content.IntentFilter.MalformedMimeTypeException;
 import android.net.Uri;
 import android.nfc.FormatException;
@@ -84,8 +85,12 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
   private String nxpLibKey = "0235a960fcb9a265be2ffe54da8288bd";
 
 
-  public Module(ReactApplicationContext reactContext) {
+  public Module(ReactApplicationContext reactContext, Application application) {
+
+
     super(reactContext);
+    reactContext.addActivityEventListener(this);
+    application.registerActivityLifecycleCallbacks((Application.ActivityLifecycleCallbacks) this);
   }
 
   @Override
