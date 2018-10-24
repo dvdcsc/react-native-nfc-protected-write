@@ -122,6 +122,13 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
 
     try{
 
+      CardType m_cardType = nxpLib.getCardType( intent );
+      Toast.makeText(getReactApplicationContext(), "m_cardType: "+m_cardType.getTagName(), Toast.LENGTH_LONG).show();
+
+      Tag tag =  intent.getParcelableExtra( NfcAdapter.EXTRA_TAG );
+      Toast.makeText(getReactApplicationContext(), "tag: "+tag, Toast.LENGTH_LONG).show();
+
+
       INTag213215216 objNtag = NTagFactory.getInstance().getNTAG216(nxpLib.getCustomModules());
 
       objNtag.getReader().connect();
