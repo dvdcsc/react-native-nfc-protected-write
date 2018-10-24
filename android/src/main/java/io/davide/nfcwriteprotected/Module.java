@@ -3,6 +3,7 @@ package io.davide.nfcwriteprotected;
 import android.app.Activity;
 import android.nfc.NfcAdapter;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.react.ReactActivity;
@@ -82,42 +83,10 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
   private NxpNfcLib nxpLib = null;
   private String nxpLibKey = "0235a960fcb9a265be2ffe54da8288bd";
 
-  private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-    @Override
-    public void onReceive(Context context, Intent intent) {
-      Log.d(LOG_TAG, "onReceive " + intent);
-      final String action = intent.getAction();
 
-      if (action.equals(NfcAdapter.ACTION_ADAPTER_STATE_CHANGED)) {
-        final int state = intent.getIntExtra(NfcAdapter.EXTRA_ADAPTER_STATE,
-                NfcAdapter.STATE_OFF);
-        String stateStr = "unknown";
-        switch (state) {
-          case NfcAdapter.STATE_OFF:
-            stateStr = "off";
-            break;
-          case NfcAdapter.STATE_TURNING_OFF:
-            stateStr = "turning_off";
-            break;
-          case NfcAdapter.STATE_ON:
-            stateStr = "on";
-            break;
-          case NfcAdapter.STATE_TURNING_ON:
-            stateStr = "turning_on";
-            break;
-        }
-
-        try {
-          WritableMap writableMap = Arguments.createMap();
-          writableMap.putString("state", stateStr);
-          sendEvent("NfcManagerStateChanged", writableMap);
-        } catch (Exception ex) {
-          Log.d(LOG_TAG, "send nfc state change event fail: " + ex);
-        }
-      }
-    }
-  };
-
+  public Module(ReactApplicationContext reactContext) {
+    super(reactContext);
+  }
 
   @Override
   public void onNewIntent(Intent intent) {
@@ -127,17 +96,6 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
   @Override
   public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
     Log.d(LOG_TAG, "onActivityResult");
-  }
-  private void sendEvent(String eventName,
-                         @Nullable WritableMap params) {
-    getReactApplicationContext()
-            .getJSModule(RCTNativeAppEventEmitter.class)
-            .emit(eventName, params);
-  }
-
-
-  public Module(ReactApplicationContext reactContext) {
-    super(reactContext);
   }
 
   @Override
@@ -156,10 +114,8 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
   @Override
   public void onHostResume() {
     Log.d(LOG_TAG, "onResume");
-    isResumed = true;
-    if (isForegroundEnabled) {
-      nxpLib.startForeGroundDispatch();
-    }
+    initializeLibrary();                  // Initialize library
+    nxpLib.startForeGroundDispatch();
   }
 
   @Override
@@ -175,15 +131,6 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
     nxpLib.stopForeGroundDispatch();
   }
 
-  @ReactMethod
-  public void start() {
-
-    initializeLibrary();
-    NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
-    IntentFilter filter = new IntentFilter(NfcAdapter.ACTION_ADAPTER_STATE_CHANGED);
-    Activity currentActivity = getCurrentActivity();
-    currentActivity.registerReceiver(mReceiver, filter);
-  }
 
   @ReactMethod
   public void show(String message) {
@@ -202,33 +149,8 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
   }
 
   @ReactMethod
-  private void registerTagEvent(String alertMessage, Boolean invalidateAfterFirstRead, Callback callback) {
-    Log.d(LOG_TAG, "registerTag");
-    isForegroundEnabled = true;
-
-    // capture all mime-based dispatch NDEF
-    IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
-    try {
-      ndef.addDataType("*/*");
-    } catch (MalformedMimeTypeException e) {
-      throw new RuntimeException("fail", e);
-    }
-    intentFilters.add(ndef);
-
-    // capture all rest NDEF, such as uri-based
-    intentFilters.add(new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED));
-    techLists.add(new String[]{Ndef.class.getName()});
-
-    // for those without NDEF, get them as tags
-    intentFilters.add(new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED));
-
-    if (isResumed) {
-      nxpLib.startForeGroundDispatch();
-    }
-
-
-
-    callback.invoke();
+  public void start() {
+    initializeLibrary();
   }
 
   @ReactMethod
@@ -258,7 +180,6 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
       nxpLib.stopForeGroundDispatch();
 
     }
-
 
   }
 }
