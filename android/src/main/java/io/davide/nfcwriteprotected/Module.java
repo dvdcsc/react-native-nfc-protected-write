@@ -136,8 +136,10 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
       Toast.makeText(getReactApplicationContext(), "__CONNECTED__", Toast.LENGTH_LONG).show();
 
       objNtag.enablePasswordProtection(true,0x10);
+      Toast.makeText(getReactApplicationContext(), "AUTHENTICATE_1", Toast.LENGTH_LONG).show();
+
       objNtag.authenticatePwd(byPassword,byAcknowg);
-      Toast.makeText(getReactApplicationContext(), "AUTHENTICATE", Toast.LENGTH_LONG).show();
+      Toast.makeText(getReactApplicationContext(), "AUTHENTICATE_2", Toast.LENGTH_LONG).show();
 
 
       byte[] data = objNtag.read(0x0f);
