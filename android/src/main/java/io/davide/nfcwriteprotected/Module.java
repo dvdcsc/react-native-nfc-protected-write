@@ -124,19 +124,16 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
     Log.d(LOG_TAG, "onNewIntent " + intent);
     connect();
   }
-
+  @Override
+  public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+    Log.d(LOG_TAG, "onActivityResult");
+  }
   private void sendEvent(String eventName,
                          @Nullable WritableMap params) {
     getReactApplicationContext()
             .getJSModule(RCTNativeAppEventEmitter.class)
             .emit(eventName, params);
   }
-
-  @Override
-  public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    Log.d(LOG_TAG, "onActivityResult");
-  }
-
 
 
   public Module(ReactApplicationContext reactContext) {
@@ -240,18 +237,7 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
       nxpLib.startForeGroundDispatch();
     }
 
-    CardType m_cardType = nxpLib.getCardType( getCurrentActivity().getIntent() );
-    Toast.makeText(getReactApplicationContext(), "m_cardType: "+m_cardType.getTagName(), Toast.LENGTH_LONG).show();
-
-    Tag tag =  getCurrentActivity().getIntent().getParcelableExtra( NfcAdapter.EXTRA_TAG );
-    Toast.makeText(getReactApplicationContext(), "tag: "+tag, Toast.LENGTH_LONG).show();
-
-
-    INTag213215216 objNtag = NTagFactory.getInstance().getNTAG213(nxpLib.getCustomModules());
-    Toast.makeText(getReactApplicationContext(), "objNtag: "+objNtag, Toast.LENGTH_LONG).show();
-
-    objNtag.getReader().connect();
-    Toast.makeText(getReactApplicationContext(), "__CONNECTED__", Toast.LENGTH_LONG).show();
+   
 
     callback.invoke();
   }
