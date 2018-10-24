@@ -85,12 +85,11 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
   private String nxpLibKey = "0235a960fcb9a265be2ffe54da8288bd";
 
 
-  public Module(ReactApplicationContext reactContext, Application application) {
+  public Module(ReactApplicationContext reactContext) {
 
 
     super(reactContext);
     reactContext.addActivityEventListener(this);
-    application.registerActivityLifecycleCallbacks((Application.ActivityLifecycleCallbacks) this);
   }
 
   @Override
