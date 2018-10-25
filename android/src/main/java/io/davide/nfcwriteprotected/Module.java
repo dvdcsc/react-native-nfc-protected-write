@@ -36,7 +36,7 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
   private String nxpLibKey = "0235a960fcb9a265be2ffe54da8288bd";
   final byte[] byPassword = new byte[] {(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff};
   final byte[] byAcknowg = new byte[] {0x00,0x00};
-  final byte[] byToWrite = new byte[] {(byte) 0x00,(byte) 0x00,(byte) 0x00,(byte) 0x00};
+  final byte[] byToWrite = new byte[] {(byte) 0x11,(byte) 0xA2,(byte) 0x1A,(byte) 0xF3};
 
   public Module(ReactApplicationContext reactContext) {
 
