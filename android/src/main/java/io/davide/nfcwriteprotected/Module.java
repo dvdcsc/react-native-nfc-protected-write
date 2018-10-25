@@ -133,7 +133,7 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
       Toast.makeText(getReactApplicationContext(), "AUTHENTICATE_1", Toast.LENGTH_LONG).show();*/
 
       objNtag.authenticatePwd(byPassword,byAcknowg);
-      byte[] bytes = "asd".getBytes("UTF-8");
+      byte[] bytes = "asdf".getBytes("UTF-8");
       Toast.makeText(getReactApplicationContext(), "bytes: " + Utilities.byteToHexString(bytes) , Toast.LENGTH_LONG).show();
 
 
