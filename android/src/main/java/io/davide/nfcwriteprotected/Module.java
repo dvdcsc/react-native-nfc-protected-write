@@ -123,7 +123,7 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
   public void connect(Intent intent) {
 
     try{
-
+      byte[] data;
       CardType m_cardType = nxpLib.getCardType( intent );
       Tag tag =  intent.getParcelableExtra( NfcAdapter.EXTRA_TAG );
       INTag213215216 objNtag = NTagFactory.getInstance().getNTAG216(nxpLib.getCustomModules());
@@ -136,7 +136,7 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
       byte[] bytes = "asdf".getBytes("UTF-8");
       Toast.makeText(getReactApplicationContext(), "bytes: " + Utilities.byteToHexString(bytes) , Toast.LENGTH_LONG).show();
 
-
+      objNtag.write(43, bytes);
 
       /*byte[] data = objNtag.read(18);
       Toast.makeText(getReactApplicationContext(), "read page 18: " + Utilities.byteToHexString(data) , Toast.LENGTH_LONG).show();
@@ -150,8 +150,8 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
       //Toast.makeText(getReactApplicationContext(), "FirstUserpage: " + objNtag.getFirstUserpage() , Toast.LENGTH_LONG).show();
 
       //objNtag.write(0x10, byToWrite);
-      byte[] data;
-      for (int i = objNtag.getFirstUserpage(); i < objNtag.getFirstUserpage() +36; i++) {
+
+      /*for (int i = objNtag.getFirstUserpage(); i < objNtag.getFirstUserpage() +36; i++) {
         data = objNtag.read(i);
         Toast.makeText(getReactApplicationContext(), "read page "+i+": " + Utilities.byteToHexString(data) , Toast.LENGTH_LONG).show();
         if(i>15 && i<28 ) {
@@ -159,7 +159,7 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
 
         }
 
-      }
+      }*/
 
 //      Toast.makeText(getReactApplicationContext(), "writed on 0x10: " , Toast.LENGTH_LONG).show();
 
