@@ -148,7 +148,10 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
       data = objNtag.read(0x0f);
       Toast.makeText(getReactApplicationContext(), "read page 0x0f: " + Utilities.byteToHexString(data) , Toast.LENGTH_LONG).show();
 
-
+      objNtag.write(0x11, byToWrite);
+      objNtag.write(0x12, byToWrite);
+      objNtag.write(0x13, byToWrite);
+      objNtag.write(0x14, byToWrite);
       //objNtag.write(0x10, byToWrite);
 
 //      Toast.makeText(getReactApplicationContext(), "writed on 0x10: " , Toast.LENGTH_LONG).show();
