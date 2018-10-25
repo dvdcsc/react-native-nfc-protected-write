@@ -134,13 +134,13 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
 
       objNtag.authenticatePwd(byPassword,byAcknowg);
       byte[] bytes = "asd".getBytes("UTF-8");
-      Toast.makeText(getReactApplicationContext(), "bytes: " + bytes , Toast.LENGTH_LONG).show();
+      Toast.makeText(getReactApplicationContext(), "bytes: " + Utilities.byteToHexString(bytes) , Toast.LENGTH_LONG).show();
 
 
 
       byte[] data = objNtag.read(4);
       Toast.makeText(getReactApplicationContext(), "read page 0x0f: " + Utilities.byteToHexString(data) , Toast.LENGTH_LONG).show();
-      objNtag.write(4, byToWrite);
+      objNtag.write(4, bytes);
       //objNtag.enablePasswordProtection(true,0x0f);
       //Toast.makeText(getReactApplicationContext(), "enablePasswordProtection: " , Toast.LENGTH_LONG).show();
       data = objNtag.read(4);
