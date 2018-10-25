@@ -138,16 +138,16 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
 
 
 
-      byte[] data = objNtag.read(4);
-      Toast.makeText(getReactApplicationContext(), "read page 0x0f: " + Utilities.byteToHexString(data) , Toast.LENGTH_LONG).show();
-      objNtag.write(4, bytes);
+      byte[] data = objNtag.read(18);
+      Toast.makeText(getReactApplicationContext(), "read page 18: " + Utilities.byteToHexString(data) , Toast.LENGTH_LONG).show();
+      objNtag.write(18, bytes);
       //objNtag.enablePasswordProtection(true,0x0f);
       //Toast.makeText(getReactApplicationContext(), "enablePasswordProtection: " , Toast.LENGTH_LONG).show();
-      data = objNtag.read(4);
-      Toast.makeText(getReactApplicationContext(), "read page 0x0f: " + Utilities.byteToHexString(data) , Toast.LENGTH_LONG).show();
+      data = objNtag.read(18);
+      Toast.makeText(getReactApplicationContext(), "read page 18: " + Utilities.byteToHexString(data) , Toast.LENGTH_LONG).show();
 
 
-      Toast.makeText(getReactApplicationContext(), "FirstUserpage: " + objNtag.getFirstUserpage() , Toast.LENGTH_LONG).show();
+      //Toast.makeText(getReactApplicationContext(), "FirstUserpage: " + objNtag.getFirstUserpage() , Toast.LENGTH_LONG).show();
 
       //objNtag.write(0x10, byToWrite);
 
