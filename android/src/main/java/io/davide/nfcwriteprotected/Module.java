@@ -1,27 +1,30 @@
 package io.davide.nfcwriteprotected;
 
 import android.app.Activity;
+import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
-import android.util.Log;
 import android.widget.Toast;
+import android.content.Intent;
+import android.nfc.Tag;
+import android.nfc.NdefRecord;
+
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import java.util.HashMap;
-import java.util.Map;;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import com.facebook.react.bridge.*;
-import android.nfc.Tag;
-import java.util.*;
 
-import com.nxp.nfclib.ndef.INdefMessage;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Locale;
+import java.io.UnsupportedEncodingException;
+import java.io.ByteArrayOutputStream;
+
 import com.nxp.nfclib.ntag.INTag213215216;
 import com.nxp.nfclib.ntag.NTagFactory;
 import com.nxp.nfclib.CardType;
 import com.nxp.nfclib.NxpNfcLib;
 import com.nxp.nfclib.utils.Utilities;
+
 
 public class Module extends ReactContextBaseJavaModule  implements ActivityEventListener, LifecycleEventListener {
 
@@ -114,6 +117,25 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
 
   }
 
+  private NdefMessage createRecord(String content) throws UnsupportedEncodingException {
+    byte[] lang = Locale.getDefault().getLanguage().getBytes("UTF-8");
+    byte[] text = content.getBytes("UTF-8"); // Content in UTF-8
+
+    int langSize = lang.length;
+    int textLength = text.length;
+
+    ByteArrayOutputStream payload = new ByteArrayOutputStream(1 + langSize + textLength);
+    payload.write((byte) (langSize & 0x1F));
+    payload.write(lang, 0, langSize);
+    payload.write(text, 0, textLength);
+    NdefRecord record = new NdefRecord(NdefRecord.TNF_WELL_KNOWN,
+            NdefRecord.RTD_TEXT, new byte[0],
+            payload.toByteArray());
+
+    return new NdefMessage(new NdefRecord[]{record});
+
+  }
+
   @ReactMethod
   public void start() {
     initializeLibrary();
@@ -133,10 +155,13 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
       Toast.makeText(getReactApplicationContext(), "AUTHENTICATE_1", Toast.LENGTH_LONG).show();*/
 
       objNtag.authenticatePwd(byPassword,byAcknowg);
-      byte[] bytes = "asdf".getBytes("UTF-8");
-      Toast.makeText(getReactApplicationContext(), "bytes: " + Utilities.byteToHexString(bytes) , Toast.LENGTH_LONG).show();
 
-      objNtag.write(43, bytes);
+
+      NdefMessage message = createRecord("asd");
+      byte[] bytes = message.toByteArray();
+
+      Toast.makeText(getReactApplicationContext(), "bytes length: " + bytes.length , Toast.LENGTH_LONG).show();
+
 
       /*byte[] data = objNtag.read(18);
       Toast.makeText(getReactApplicationContext(), "read page 18: " + Utilities.byteToHexString(data) , Toast.LENGTH_LONG).show();
