@@ -20,6 +20,7 @@ import java.util.Locale;
 import java.io.UnsupportedEncodingException;
 import java.io.ByteArrayOutputStream;
 
+import com.nxp.nfclib.ndef.INdefMessage;
 import com.nxp.nfclib.ntag.INTag213215216;
 import com.nxp.nfclib.ntag.NTagFactory;
 import com.nxp.nfclib.CardType;
@@ -158,21 +159,19 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
       objNtag.authenticatePwd(byPassword,byAcknowg);
 
 
-      NdefMessage message = createRecord("a");
-      byte[] bytes = message.toByteArray();
+      NdefMessage message = createRecord("asd");
 
-      Toast.makeText(getReactApplicationContext(), "bytes length: " + bytes.length , Toast.LENGTH_LONG).show();
-
-      byte [] page1 = Arrays.copyOfRange(bytes,0,4);
-      byte [] page2 = Arrays.copyOfRange(bytes,4,8);;
+      INdefMessage asd = new INdefMessage() {
+        @Override
+        public byte[] toByteArray() {
+          return "asd".getBytes();
+        }
+      };
 
       Toast.makeText(getReactApplicationContext(), "read page 4: " + Utilities.byteToHexString(objNtag.read(4)) , Toast.LENGTH_LONG).show();
-      objNtag.write(4, page1);
+      objNtag.writeNDEF(asd);
       Toast.makeText(getReactApplicationContext(), "read page 4 after write: " + Utilities.byteToHexString(objNtag.read(4)) , Toast.LENGTH_LONG).show();
 
-      Toast.makeText(getReactApplicationContext(), "read page 5: " + Utilities.byteToHexString(objNtag.read(5)) , Toast.LENGTH_LONG).show();
-      objNtag.write(5, page2);
-      Toast.makeText(getReactApplicationContext(), "read page 5 after write: " + Utilities.byteToHexString(objNtag.read(5)) , Toast.LENGTH_LONG).show();
 
       /*byte[] data = objNtag.read(18);
       Toast.makeText(getReactApplicationContext(), "read page 18: " + Utilities.byteToHexString(data) , Toast.LENGTH_LONG).show();
