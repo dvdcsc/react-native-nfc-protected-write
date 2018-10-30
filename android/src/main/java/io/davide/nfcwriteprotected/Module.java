@@ -13,6 +13,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Locale;
@@ -162,6 +163,16 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
 
       Toast.makeText(getReactApplicationContext(), "bytes length: " + bytes.length , Toast.LENGTH_LONG).show();
 
+      byte [] page1 = Arrays.copyOfRange(bytes,0,4);
+      byte [] page2 = Arrays.copyOfRange(bytes,4,8);;
+
+      Toast.makeText(getReactApplicationContext(), "read page 4: " + Utilities.byteToHexString(objNtag.read(4)) , Toast.LENGTH_LONG).show();
+      objNtag.write(4, page1);
+      Toast.makeText(getReactApplicationContext(), "read page 4 after write: " + Utilities.byteToHexString(objNtag.read(4)) , Toast.LENGTH_LONG).show();
+
+      Toast.makeText(getReactApplicationContext(), "read page 5: " + Utilities.byteToHexString(objNtag.read(5)) , Toast.LENGTH_LONG).show();
+      objNtag.write(5, page2);
+      Toast.makeText(getReactApplicationContext(), "read page 5 after write: " + Utilities.byteToHexString(objNtag.read(5)) , Toast.LENGTH_LONG).show();
 
       /*byte[] data = objNtag.read(18);
       Toast.makeText(getReactApplicationContext(), "read page 18: " + Utilities.byteToHexString(data) , Toast.LENGTH_LONG).show();
