@@ -164,7 +164,7 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
       INdefMessage asd = new INdefMessage() {
         @Override
         public byte[] toByteArray() {
-          return "asd".getBytes();
+          return "asdfasdfasdfasdfasdfasdf".getBytes();
         }
       };
 
@@ -172,6 +172,7 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
       objNtag.writeNDEF(asd);
       Toast.makeText(getReactApplicationContext(), "read page 4 after write: " + Utilities.byteToHexString(objNtag.read(4)) , Toast.LENGTH_LONG).show();
 
+      objNtag.
 
       /*byte[] data = objNtag.read(18);
       Toast.makeText(getReactApplicationContext(), "read page 18: " + Utilities.byteToHexString(data) , Toast.LENGTH_LONG).show();
