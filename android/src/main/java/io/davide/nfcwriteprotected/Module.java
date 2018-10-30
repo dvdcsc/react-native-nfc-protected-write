@@ -157,7 +157,7 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
       objNtag.authenticatePwd(byPassword,byAcknowg);
 
 
-      NdefMessage message = createRecord("asd");
+      NdefMessage message = createRecord("a");
       byte[] bytes = message.toByteArray();
 
       Toast.makeText(getReactApplicationContext(), "bytes length: " + bytes.length , Toast.LENGTH_LONG).show();
