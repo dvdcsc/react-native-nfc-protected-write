@@ -152,29 +152,34 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
       Tag tag =  intent.getParcelableExtra( NfcAdapter.EXTRA_TAG );
       INTag213215216 objNtag = NTagFactory.getInstance().getNTAG213(nxpLib.getCustomModules());
       objNtag.getReader().connect();
-
+      /*INdefMessage message = new INdefMessage() {
+        @Override
+        public byte[] toByteArray() {
+          return "test".getBytes();
+        }
+      };
+      objNtag.writeNDEF(message);
+      */
       /*objNtag.enablePasswordProtection(true,0x10);
       Toast.makeText(getReactApplicationContext(), "AUTHENTICATE_1", Toast.LENGTH_LONG).show();*/
 
       //objNtag.authenticatePwd(byPassword,byAcknowg);
 
 
-      //NdefMessage message = createRecord("asd");
-
-      INdefMessage asd = new INdefMessage() {
-        @Override
-        public byte[] toByteArray() {
-          return "test".getBytes();
-        }
-      };
-
-      asd.toByteArray();
+      NdefMessage message = createRecord("a");
+      byte[] bytes = message.toByteArray();
+      byte [] page1 = Arrays.copyOfRange(bytes,0,4);
+      byte [] page2 = Arrays.copyOfRange(bytes,4,8);;
+      objNtag.write(4, page1);
+      objNtag.write(5, page2);
+      /*
+      message.toByteArray();
 
       Toast.makeText(getReactApplicationContext(), "read page 4: " + Utilities.byteToHexString(objNtag.read(4)) , Toast.LENGTH_LONG).show();
-      objNtag.writeNDEF(asd);
+      objNtag.writeNDEF(message);
       Toast.makeText(getReactApplicationContext(), "read page 4 after write: " + Utilities.byteToHexString(objNtag.read(4)) , Toast.LENGTH_LONG).show();
 
-
+*/
       /*byte[] data = objNtag.read(18);
       Toast.makeText(getReactApplicationContext(), "read page 18: " + Utilities.byteToHexString(data) , Toast.LENGTH_LONG).show();
       objNtag.write(18, bytes);
