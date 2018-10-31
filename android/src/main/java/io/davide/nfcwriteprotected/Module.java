@@ -150,23 +150,25 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
       byte[] data;
       CardType m_cardType = nxpLib.getCardType( intent );
       Tag tag =  intent.getParcelableExtra( NfcAdapter.EXTRA_TAG );
-      INTag213215216 objNtag = NTagFactory.getInstance().getNTAG216(nxpLib.getCustomModules());
+      INTag213215216 objNtag = NTagFactory.getInstance().getNTAG213(nxpLib.getCustomModules());
       objNtag.getReader().connect();
 
       /*objNtag.enablePasswordProtection(true,0x10);
       Toast.makeText(getReactApplicationContext(), "AUTHENTICATE_1", Toast.LENGTH_LONG).show();*/
 
-      objNtag.authenticatePwd(byPassword,byAcknowg);
+      //objNtag.authenticatePwd(byPassword,byAcknowg);
 
 
-      NdefMessage message = createRecord("asd");
+      //NdefMessage message = createRecord("asd");
 
       INdefMessage asd = new INdefMessage() {
         @Override
         public byte[] toByteArray() {
-          return "asdfasdfasdfasdfasdfasdf".getBytes();
+          return "test".getBytes();
         }
       };
+
+      asd.toByteArray();
 
       Toast.makeText(getReactApplicationContext(), "read page 4: " + Utilities.byteToHexString(objNtag.read(4)) , Toast.LENGTH_LONG).show();
       objNtag.writeNDEF(asd);
