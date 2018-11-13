@@ -159,7 +159,9 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
       Toast.makeText(getReactApplicationContext(), "message: "+message, Toast.LENGTH_LONG).show();
       Ndef ndef = Ndef.get(tag);
       Toast.makeText(getReactApplicationContext(), "ndef: "+ndef, Toast.LENGTH_LONG).show();
-
+      ndef.connect();
+      ndef.writeNdefMessage(message);
+      ndef.close();
       /*objNtag.enablePasswordProtection(true,0x10);
       Toast.makeText(getReactApplicationContext(), "AUTHENTICATE_1", Toast.LENGTH_LONG).show();*/
 
