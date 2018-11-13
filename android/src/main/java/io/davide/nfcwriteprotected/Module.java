@@ -3,6 +3,7 @@ package io.davide.nfcwriteprotected;
 import android.app.Activity;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
+import android.nfc.tech.Ndef;
 import android.widget.Toast;
 import android.content.Intent;
 import android.nfc.Tag;
@@ -150,36 +151,37 @@ public class Module extends ReactContextBaseJavaModule  implements ActivityEvent
       byte[] data;
       CardType m_cardType = nxpLib.getCardType( intent );
       Tag tag =  intent.getParcelableExtra( NfcAdapter.EXTRA_TAG );
-      INTag213215216 objNtag = NTagFactory.getInstance().getNTAG213(nxpLib.getCustomModules());
+
+      INTag213215216 objNtag = NTagFactory.getInstance().getNTAG216(nxpLib.getCustomModules());
       objNtag.getReader().connect();
-      /*INdefMessage message = new INdefMessage() {
-        @Override
-        public byte[] toByteArray() {
-          return "test".getBytes();
-        }
-      };
-      objNtag.writeNDEF(message);
-      */
+
+      NdefMessage message = createRecord("asd");
+      Toast.makeText(getReactApplicationContext(), "message: "+message, Toast.LENGTH_LONG).show();
+      Ndef ndef = Ndef.get(tag);
+      Toast.makeText(getReactApplicationContext(), "ndef: "+ndef, Toast.LENGTH_LONG).show();
+
       /*objNtag.enablePasswordProtection(true,0x10);
       Toast.makeText(getReactApplicationContext(), "AUTHENTICATE_1", Toast.LENGTH_LONG).show();*/
 
-      //objNtag.authenticatePwd(byPassword,byAcknowg);
+//      objNtag.authenticatePwd(byPassword,byAcknowg);
 
 
-      NdefMessage message = createRecord("a");
-      byte[] bytes = message.toByteArray();
-      byte [] page1 = Arrays.copyOfRange(bytes,0,4);
-      byte [] page2 = Arrays.copyOfRange(bytes,4,8);;
-      objNtag.write(4, page1);
-      objNtag.write(5, page2);
-      /*
-      message.toByteArray();
+
+
+      /*INdefMessage asd = new INdefMessage() {
+        @Override
+        public byte[] toByteArray() {
+          return "asdfasdfasdfasdfasdfasdf".getBytes();
+        }
+      };
+
+      asd.toByteArray();
 
       Toast.makeText(getReactApplicationContext(), "read page 4: " + Utilities.byteToHexString(objNtag.read(4)) , Toast.LENGTH_LONG).show();
-      objNtag.writeNDEF(message);
+      objNtag.writeNDEF(asd);
       Toast.makeText(getReactApplicationContext(), "read page 4 after write: " + Utilities.byteToHexString(objNtag.read(4)) , Toast.LENGTH_LONG).show();
-
 */
+
       /*byte[] data = objNtag.read(18);
       Toast.makeText(getReactApplicationContext(), "read page 18: " + Utilities.byteToHexString(data) , Toast.LENGTH_LONG).show();
       objNtag.write(18, bytes);
